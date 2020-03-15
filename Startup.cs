@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using MyProject.Data;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace MyProject
 {
@@ -24,18 +26,22 @@ namespace MyProject
 
             services.AddDbContext<MyProjecContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MyProjecContext")));
+
+            Log.Information(Configuration.GetConnectionString("MyProjecContext"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                logger.LogInformation("In Development environment");
+                app.UseExceptionHandler("/error-local-development");
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                logger.LogInformation("In non Development environment");
+                app.UseExceptionHandler("/error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

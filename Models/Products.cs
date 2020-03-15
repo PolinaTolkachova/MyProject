@@ -9,7 +9,9 @@ namespace MyProject.Models
         [Display(Name = "Product ID")]
         public int Id { get; set; }
 
+        [Required]
         [Display(Name = "Product name")]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$")]
         public string ProductName { get; set; }
 
         [Display(Name = "Supplier ID")]
@@ -22,6 +24,7 @@ namespace MyProject.Models
         public string QuantityPerUnit { get; set; }
 
         [Display(Name = "Unit price")]
+        [Range(0, 999.99)]
         public decimal UnitPrice { get; set; }
 
         [Display(Name = "Units in stock")]
@@ -31,8 +34,11 @@ namespace MyProject.Models
         public short UnitsOnOrder { get; set; }
 
         [Display(Name = "Reorder level")]
+        [Range(0, 100)]
         public short ReorderLevel { get; set; }
 
+        [Required]
+        [Display(Name = "Discontinued")]
         public bool Discontinued { get; set; }
     }
 }
